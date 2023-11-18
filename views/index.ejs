@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather APP</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="bg">
+        <img src="img/bg4.jpg" alt="">
+    </div> 
+
+
+
+    <div class="container">
+
+        <div class="box">
+            <div class="searchform">
+                <form action="/search" method="POST">
+                    <input class="searchbar" type="text" name="search" placeholder="Enter to search a city" autocomplete="off" autocapitalize="on">
+                    <button class="searchbar" type="submit" name="submit" value="yes">Search</button>
+                </form>
+            </div>
+
+            <div class="head">
+                <h1>Today's Weather</h1>
+                <span id="date"></span>
+            </div>
+
+            <div class="main">
+                <% if(locals.weather && locals.place){ %>
+                    <p class="info"><%= place.name %></p>
+                    <span> Min: <%= weather.main.temp_min %>&deg;C | Max: <%= weather.main.temp_max %>&deg;C </span>
+                    <p class="info"><%= weather.main.temp %>&deg;C</p>
+                    <p>Feels like: <%= weather.main.feels_like %>&deg;C</p>
+                    <p class="info"><%= _.capitalize(weather.weather[0].description) %></p>
+                    <p class="info">Humidity: <%= weather.main.humidity %></p>
+                <% } else if(locals.error){ %>
+                    <%= error %> 
+                <% } %>
+            </div>
+
+        </div>
+
+        <div class="box2" style="background: none;">
+            <span id="time"></span>
+
+            <div class="forecasts">
+                <% if(locals.forecasts){ %>
+                    <% for(let i = 8; i<forecasts.length; i=i+8){ %>
+                        <% let nextDate = new Date(forecasts[i].dt *1000); %>
+                        <div class="cards">
+                            <p id="dates"> <%= nextDate.toLocaleString('en-US', { weekday: "short", day: "2-digit", month: "short"}) %> </p>
+                            <p id="foreTemp"> <%= forecasts[i].main.temp %>&deg;C </p> 
+                            <p id="foreDesc"> <%= _.capitalize(forecasts[i].weather[0].description) %> </p>
+                            <p id="foreHumid">Humidity: <%= forecasts[i].main.humidity %></p> 
+                        </div>
+                        <% } %>
+                    <% } %>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script src="scripts/script.js"></script>
+
+</html>
